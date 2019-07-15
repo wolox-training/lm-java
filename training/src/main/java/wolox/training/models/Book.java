@@ -1,5 +1,8 @@
 package wolox.training.models;
 
+import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -39,6 +42,9 @@ public class Book {
 
     @Column(nullable = false)
     private String isbn;
+
+    @Column
+    private Collection<User> users = new LinkedList<>();
 
     public Book() { }
 
