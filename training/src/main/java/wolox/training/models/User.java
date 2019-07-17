@@ -5,8 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,15 +37,17 @@ public class User {
     @Column(nullable = false)
     private LocalDate birthdate;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
         name = "book_users",
         joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
         inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
     @JsonIgnoreProperties("users")
-    private List<Book> books = new LinkedList<>();
+    private Set<Book> books;
 
-    public User() { }
+    public User() {
+        this.books = new HashSet<>();
+    }
 
     public int getId() {
         return Id;
@@ -73,17 +77,18 @@ public class User {
         this.birthdate = birthdate;
     }
 
-    public List<Book> getBooks() {
-        return (List<Book>) Collections.unmodifiableList(books);
+    public Set<Book> getBooks() {
+        return (Set<Book>) Collections.unmodifiableSet(books);
     }
 
-    public void setBooks(List<Book> books) {
+    public void setBooks(Set<Book> books) {
         this.books = books;
     }
 
     public void addBook(Book book) throws BookAlreadyOwnedException {
-        if (books.contains(book))
+        if (books.contains(book)) {
             throw new BookAlreadyOwnedException("Book already owned by user");
+        }
         books.add(book);
     }
 }

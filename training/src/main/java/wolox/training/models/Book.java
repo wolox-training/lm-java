@@ -2,8 +2,10 @@ package wolox.training.models;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,9 +48,11 @@ public class Book {
     private String isbn;
 
     @ManyToMany(mappedBy = "books")
-    private List<User> users = new LinkedList<>();
+    private Set<User> users;
 
-    public Book() { }
+    public Book() {
+        this.users = new HashSet<>();
+    }
 
     public long getId() {
         return id;
@@ -126,7 +130,7 @@ public class Book {
         this.isbn = isbn;
     }
 
-    public List<User> getUsers() {
-        return (List<User>) Collections.unmodifiableList(users);
+    public Set<User> getUsers() {
+        return (Set<User>) Collections.unmodifiableSet(users);
     }
 }
