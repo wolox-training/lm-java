@@ -1,10 +1,7 @@
 package wolox.training.models;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,6 +50,7 @@ public class Book {
     public Book() {
         this.users = new HashSet<>();
     }
+
 
     public long getId() {
         return id;
