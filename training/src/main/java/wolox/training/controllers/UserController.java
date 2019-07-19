@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotFoundException;
+import wolox.training.exceptions.BookNotOwnedByUserException;
 import wolox.training.exceptions.UserIdMismatchException;
 import wolox.training.exceptions.UserNotFoundException;
 import wolox.training.models.Book;
@@ -22,7 +23,7 @@ import wolox.training.repositories.BookRepository;
 import wolox.training.repositories.UserRepository;
 
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/api/users")
 public class UserController {
 
     @Autowired
@@ -37,7 +38,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable Integer id) {
+    public User updateUser(@RequestBody User user, @PathVariable int id) {
         if (user.getId() != id) {
             throw new UserIdMismatchException();
         }
@@ -72,6 +73,20 @@ public class UserController {
         try {
             user.addBook(bookToAdd);
         } catch (BookAlreadyOwnedException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getLocalizedMessage());
+        }
+        userRepository.save(user);
+        return user;
+    }
+
+    @GetMapping("{id}/removeBook")
+    public User updateRemoveBook(@RequestBody Book book, @RequestParam int id) {
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        Book bookToRemove = bookRepository.findById(book.getId()).orElseThrow(BookNotFoundException::new);
+        try {
+            user.removeBook(bookToRemove);
+            bookToRemove.removeUser(user);
+        } catch (BookNotOwnedByUserException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getLocalizedMessage());
         }
         userRepository.save(user);
