@@ -1,5 +1,7 @@
 package wolox.training.models;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToMany;
 import wolox.training.exceptions.BookNotOwnedByUserException;
 
 @Entity
+@ApiModel(description = "Books from the TrainingApi")
 public class Book {
 
     @Id
@@ -19,33 +22,43 @@ public class Book {
     private long id;
 
     @Column
+    @ApiModelProperty(notes = "The book genre: horror, comedy, drama, etc.")
     private String genre;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The book author, e.g., Borges.")
     private String author;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The images of the book.")
     private String image;
 
     @Column(nullable = false, unique = true)
+    @ApiModelProperty(notes = "The title of the book, e.g., The Wolox Chronicles.")
     private String title;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The subtitle of the book, e.g., The tale of an old pull request.")
     private String subtitle;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The publisher of the book, e.g., Salamandra.")
     private String publisher;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The year of publication: 2019, 2018, etc.")
     private String year;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The number of pages the book has.")
     private int pages;
 
     @Column(nullable = false)
+    @ApiModelProperty(notes = "The number of pages the book has.")
     private String isbn;
 
     @ManyToMany(mappedBy = "books")
+    @ApiModelProperty(notes = "Set of users that own the book.")
     private Set<User> users;
 
     public Book() {
