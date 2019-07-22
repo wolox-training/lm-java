@@ -34,7 +34,7 @@ public class User {
     @Column(nullable = false)
     private LocalDate birthdate;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
         name = "book_users",
         joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
