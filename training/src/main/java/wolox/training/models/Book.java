@@ -54,7 +54,7 @@ public class Book {
     private int pages;
 
     @Column(nullable = false)
-    @ApiModelProperty(notes = "The number of pages the book has.")
+    @ApiModelProperty(notes = "International Standard Book Number that identifies the book.")
     private String isbn;
 
     @ManyToMany(mappedBy = "books")
