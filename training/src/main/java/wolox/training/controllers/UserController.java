@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import wolox.training.exceptions.BookAlreadyOwnedException;
@@ -33,6 +34,7 @@ public class UserController {
     private BookRepository bookRepository;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody User user) {
         return userRepository.save(user);
     }
@@ -66,7 +68,7 @@ public class UserController {
     }
 
 
-    @GetMapping("{id}/addBook")
+    @PutMapping("{id}/addBook")
     public User updateAddBook(@RequestBody Book book, @RequestParam int id) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         Book bookToAdd = bookRepository.findById(book.getId()).orElseThrow(BookNotFoundException::new);
@@ -79,7 +81,7 @@ public class UserController {
         return user;
     }
 
-    @GetMapping("{id}/removeBook")
+    @PutMapping("{id}/removeBook")
     public User updateRemoveBook(@RequestBody Book book, @RequestParam int id) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         Book bookToRemove = bookRepository.findById(book.getId()).orElseThrow(BookNotFoundException::new);
