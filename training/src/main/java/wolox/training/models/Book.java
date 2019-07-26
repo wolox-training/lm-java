@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import wolox.training.exceptions.BookNotOwnedByUserException;
 
 @Entity
 public class Book {
@@ -130,5 +131,11 @@ public class Book {
 
     public Set<User> getUsers() {
         return (Set<User>) Collections.unmodifiableSet(users);
+    }
+
+    public void removeUser(User user) throws BookNotOwnedByUserException {
+        if (!this.users.remove(user)) {
+            throw new BookNotOwnedByUserException("User doesn't own book");
+        }
     }
 }
