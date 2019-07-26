@@ -1,5 +1,7 @@
 package wolox.training.controllers;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.models.Book;
 import wolox.training.repositories.BookRepository;
 
+@Api(value="Book Management")
 @RestController
 @RequestMapping("/api/books")
 public class BookController {
@@ -36,6 +39,7 @@ public class BookController {
         return bookRepository.save(book);
     }
 
+    @ApiOperation(value = "View list of all books", response = Iterable.class)
     @GetMapping
     public Iterable<Book> findAll() {
         return bookRepository.findAll();
