@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.google.common.base.Preconditions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Collections;
@@ -11,11 +12,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import org.thymeleaf.util.StringUtils;
 import wolox.training.exceptions.BookNotOwnedByUserException;
 
 @Entity
 @ApiModel(description = "Books from the TrainingApi")
 public class Book {
+
+    private static final String NULL_PARAMETER = "The parameter should not be null";
+
+    private static final String EMPTY_STRING = "String should have at least 1 character";
+
+    private static final String NEGATIVE_QUANTITY = "The quantity should be positive integer";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -75,6 +83,8 @@ public class Book {
     }
 
     public void setGenre(String genre) {
+        Preconditions.checkNotNull(genre, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(genre), EMPTY_STRING);
         this.genre = genre;
     }
 
@@ -83,6 +93,8 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        Preconditions.checkNotNull(author, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(author), EMPTY_STRING);
         this.author = author;
     }
 
@@ -91,6 +103,8 @@ public class Book {
     }
 
     public void setImage(String image) {
+        Preconditions.checkNotNull(image, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(image), EMPTY_STRING);
         this.image = image;
     }
 
@@ -99,6 +113,8 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        Preconditions.checkNotNull(title, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(title), EMPTY_STRING);
         this.title = title;
     }
 
@@ -107,6 +123,8 @@ public class Book {
     }
 
     public void setSubtitle(String subtitle) {
+        Preconditions.checkNotNull(subtitle, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(subtitle), EMPTY_STRING);
         this.subtitle = subtitle;
     }
 
@@ -115,6 +133,8 @@ public class Book {
     }
 
     public void setPublisher(String publisher) {
+        Preconditions.checkNotNull(publisher, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(publisher), EMPTY_STRING);
         this.publisher = publisher;
     }
 
@@ -123,6 +143,8 @@ public class Book {
     }
 
     public void setYear(String year) {
+        Preconditions.checkNotNull(year, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(year), EMPTY_STRING);
         this.year = year;
     }
 
@@ -131,6 +153,8 @@ public class Book {
     }
 
     public void setPages(int pages) {
+        Preconditions.checkArgument(pages > 0, NEGATIVE_QUANTITY);
+        Preconditions.checkNotNull(pages, NULL_PARAMETER);
         this.pages = pages;
     }
 
@@ -139,6 +163,8 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        Preconditions.checkNotNull(isbn, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(isbn), EMPTY_STRING);
         this.isbn = isbn;
     }
 
@@ -147,6 +173,7 @@ public class Book {
     }
 
     public void removeUser(User user) throws BookNotOwnedByUserException {
+        Preconditions.checkNotNull(user, NULL_PARAMETER);
         if (!this.users.remove(user)) {
             throw new BookNotOwnedByUserException("User doesn't own book");
         }

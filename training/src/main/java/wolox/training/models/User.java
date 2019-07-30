@@ -2,6 +2,7 @@ package wolox.training.models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.common.base.Preconditions;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -15,12 +16,17 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Id;
+import org.thymeleaf.util.StringUtils;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotOwnedByUserException;
 
 @Entity
 @Table(name = "users")
 public class User {
+
+    private static final String NULL_PARAMETER = "The parameter should not be null";
+
+    private static final String EMPTY_STRING = "String should have at least 1 character";
 
     @Id
     @GeneratedValue
@@ -56,6 +62,8 @@ public class User {
     }
 
     public void setUsername(String username) {
+        Preconditions.checkNotNull(username, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(username), EMPTY_STRING);
         this.username = username;
     }
 
@@ -64,6 +72,8 @@ public class User {
     }
 
     public void setName(String name) {
+        Preconditions.checkNotNull(name, NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(username), EMPTY_STRING);
         this.name = name;
     }
 
@@ -72,6 +82,7 @@ public class User {
     }
 
     public void setBirthdate(LocalDate birthdate) {
+        Preconditions.checkNotNull(birthdate, NULL_PARAMETER);
         this.birthdate = birthdate;
     }
 
@@ -80,10 +91,12 @@ public class User {
     }
 
     public void setBooks(Set<Book> books) {
+        Preconditions.checkNotNull(books, NULL_PARAMETER);
         this.books = books;
     }
 
     public void addBook(Book book) throws BookAlreadyOwnedException {
+        Preconditions.checkNotNull(book, NULL_PARAMETER);
         if (books.contains(book)) {
             throw new BookAlreadyOwnedException("User already owns given book");
         }
@@ -91,6 +104,7 @@ public class User {
     }
 
     public void removeBook(Book book) throws BookNotOwnedByUserException {
+        Preconditions.checkNotNull(book, NULL_PARAMETER);
         if (!this.books.remove(book)) {
             throw new BookNotOwnedByUserException("User doesn't own book");
         }
