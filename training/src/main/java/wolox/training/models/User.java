@@ -24,9 +24,9 @@ import wolox.training.exceptions.BookNotOwnedByUserException;
 @Table(name = "users")
 public class User {
 
-    private static final String NULL_PARAMETER = "The parameter should not be null";
+    private static final String NULL_PARAMETER = "The parameter should not be null.";
 
-    private static final String EMPTY_STRING = "String should have at least 1 character";
+    private static final String EMPTY_STRING = "String should have at least 1 character.";
 
     @Id
     @GeneratedValue
@@ -73,7 +73,7 @@ public class User {
 
     public void setName(String name) {
         Preconditions.checkNotNull(name, NULL_PARAMETER);
-        Preconditions.checkArgument(!StringUtils.isEmpty(username), EMPTY_STRING);
+        Preconditions.checkArgument(!StringUtils.isEmpty(name), EMPTY_STRING);
         this.name = name;
     }
 

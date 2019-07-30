@@ -19,11 +19,11 @@ import wolox.training.exceptions.BookNotOwnedByUserException;
 @ApiModel(description = "Books from the TrainingApi")
 public class Book {
 
-    private static final String NULL_PARAMETER = "The parameter should not be null";
+    private static final String NULL_PARAMETER = "The parameter should not be null.";
 
-    private static final String EMPTY_STRING = "String should have at least 1 character";
+    private static final String EMPTY_STRING = "String should have at least 1 character.";
 
-    private static final String NEGATIVE_QUANTITY = "The quantity should be positive integer";
+    private static final String NEGATIVE_QUANTITY = "The quantity should be a positive integer.";
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
