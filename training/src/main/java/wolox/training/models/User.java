@@ -24,7 +24,7 @@ public class User {
 
     @Id
     @GeneratedValue
-    private int Id;
+    private int id;
 
     @Column(nullable = false)
     private String username;
@@ -48,7 +48,7 @@ public class User {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public String getUsername() {

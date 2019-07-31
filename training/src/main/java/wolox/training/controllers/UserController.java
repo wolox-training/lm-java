@@ -69,7 +69,7 @@ public class UserController {
 
 
     @PutMapping("{id}/addBook")
-    public User updateAddBook(@RequestBody Book book, @RequestParam int id) {
+    public User updateAddBook(@PathVariable int id, @RequestBody Book book) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         Book bookToAdd = bookRepository.findById(book.getId()).orElseThrow(BookNotFoundException::new);
         try {
@@ -82,7 +82,7 @@ public class UserController {
     }
 
     @PutMapping("{id}/removeBook")
-    public User updateRemoveBook(@RequestBody Book book, @RequestParam int id) {
+    public User updateRemoveBook(@PathVariable int id, @RequestBody Book book) {
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         Book bookToRemove = bookRepository.findById(book.getId()).orElseThrow(BookNotFoundException::new);
         try {
