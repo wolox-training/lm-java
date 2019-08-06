@@ -1,5 +1,6 @@
 package wolox.training.models;
 
+import com.google.common.base.Preconditions;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.Collections;
@@ -11,7 +12,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
+import org.thymeleaf.util.StringUtils;
 import wolox.training.exceptions.BookNotOwnedByUserException;
+import wolox.training.utils.MessageConstants;
 
 @Entity
 @ApiModel(description = "Books from the TrainingApi")
@@ -75,6 +78,8 @@ public class Book {
     }
 
     public void setGenre(String genre) {
+        Preconditions.checkNotNull(genre, MessageConstants.NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(genre), MessageConstants.EMPTY_STRING);
         this.genre = genre;
     }
 
@@ -83,6 +88,8 @@ public class Book {
     }
 
     public void setAuthor(String author) {
+        Preconditions.checkNotNull(author, MessageConstants.NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(author), MessageConstants.EMPTY_STRING);
         this.author = author;
     }
 
@@ -91,6 +98,8 @@ public class Book {
     }
 
     public void setImage(String image) {
+        Preconditions.checkNotNull(image, MessageConstants.NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(image), MessageConstants.EMPTY_STRING);
         this.image = image;
     }
 
@@ -99,6 +108,8 @@ public class Book {
     }
 
     public void setTitle(String title) {
+        Preconditions.checkNotNull(title, MessageConstants.NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(title), MessageConstants.EMPTY_STRING);
         this.title = title;
     }
 
@@ -107,6 +118,8 @@ public class Book {
     }
 
     public void setSubtitle(String subtitle) {
+        Preconditions.checkNotNull(subtitle, MessageConstants.NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(subtitle), MessageConstants.EMPTY_STRING);
         this.subtitle = subtitle;
     }
 
@@ -115,6 +128,8 @@ public class Book {
     }
 
     public void setPublisher(String publisher) {
+        Preconditions.checkNotNull(publisher, MessageConstants.NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(publisher), MessageConstants.EMPTY_STRING);
         this.publisher = publisher;
     }
 
@@ -123,6 +138,8 @@ public class Book {
     }
 
     public void setYear(String year) {
+        Preconditions.checkNotNull(year, MessageConstants.NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(year), MessageConstants.EMPTY_STRING);
         this.year = year;
     }
 
@@ -131,6 +148,8 @@ public class Book {
     }
 
     public void setPages(int pages) {
+        Preconditions.checkArgument(pages > 0, MessageConstants.NEGATIVE_QUANTITY);
+        Preconditions.checkNotNull(pages, MessageConstants.NULL_PARAMETER);
         this.pages = pages;
     }
 
@@ -139,6 +158,8 @@ public class Book {
     }
 
     public void setIsbn(String isbn) {
+        Preconditions.checkNotNull(isbn, MessageConstants.NULL_PARAMETER);
+        Preconditions.checkArgument(!StringUtils.isEmpty(isbn), MessageConstants.EMPTY_STRING);
         this.isbn = isbn;
     }
 
@@ -147,6 +168,7 @@ public class Book {
     }
 
     public void removeUser(User user) throws BookNotOwnedByUserException {
+        Preconditions.checkNotNull(user, MessageConstants.NULL_PARAMETER);
         if (!this.users.remove(user)) {
             throw new BookNotOwnedByUserException("User doesn't own book");
         }
