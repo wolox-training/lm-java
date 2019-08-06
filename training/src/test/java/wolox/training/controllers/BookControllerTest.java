@@ -2,8 +2,8 @@ package wolox.training.controllers;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -29,7 +29,7 @@ import wolox.training.repositories.BookRepository;
 @WebMvcTest(BookController.class)
 public class BookControllerTest {
 
-       @Autowired
+    @Autowired
     private MockMvc mvc;
 
     @MockBean
@@ -42,7 +42,7 @@ public class BookControllerTest {
 
     @Before
     public void setUp() throws JsonProcessingException {
-        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper = new ObjectMapper();
         oneTestBook = new Book();
         oneTestBook.setAuthor("Stephen King");
         oneTestBook.setGenre("Terror");
@@ -78,11 +78,20 @@ public class BookControllerTest {
     @Test
     public void whenFindAllBooks_thenBooksAreReturned() throws Exception {
         Mockito.when(mockBookRepository.findAll()).thenReturn(
-            Arrays.asList(new Book[]{oneTestBook, twoTestBook}));
-            mvc.perform(get("/api/books/")
+            Arrays.asList(new Book[] { oneTestBook, twoTestBook }));
+        mvc.perform(get("/api/books/")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$", hasSize(2)))
-            .andExpect(jsonPath("$[0].title", is(oneTestBook.getTitle())));
+            .andExpect(jsonPath("$[0].title", is(oneTestBook.getTitle())))
+            .andExpect(jsonPath("$[1].title", is(twoTestBook.getTitle())));
+    }
+
+    @Test
+    public void whenDeleteBook_thenBookNotFound() throws Exception {
+        Mockito.when(mockBookRepository.findById(3L)).thenReturn(Optional.empty());
+        mvc.perform(delete("/api/books/3")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
     }
 }

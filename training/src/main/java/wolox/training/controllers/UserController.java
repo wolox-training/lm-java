@@ -75,7 +75,7 @@ public class UserController {
         try {
             user.addBook(bookToAdd);
         } catch (BookAlreadyOwnedException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getLocalizedMessage());
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getLocalizedMessage());
         }
         userRepository.save(user);
         return user;
