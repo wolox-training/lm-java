@@ -88,10 +88,18 @@ public class BookControllerTest {
     }
 
     @Test
-    public void whenDeleteBook_thenBookNotFound() throws Exception {
+    public void whenDeleteBookWhichNotExists_thenBookNotFound() throws Exception {
         Mockito.when(mockBookRepository.findById(3L)).thenReturn(Optional.empty());
         mvc.perform(delete("/api/books/3")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void whenDeleteBookWhichExists_thenOkResponse() throws Exception {
+        Mockito.when(mockBookRepository.findById(1L)).thenReturn(Optional.ofNullable(oneTestBook));
+        mvc.perform(delete("/api/books/1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
     }
 }

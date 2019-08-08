@@ -116,11 +116,19 @@ public class UserControllerTest {
     }
 
     @Test
-    public void whenDeleteUser_thenUserNotFound() throws Exception {
+    public void whenDeleteUserWhichNotExists_thenUserNotFound() throws Exception {
         Mockito.when(mockUserRepository.findById(3)).thenReturn(Optional.empty());
         mvc.perform(delete("/api/users/3")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void whenDeleteUserWhichExists_thenOkResponse() throws Exception {
+        Mockito.when(mockUserRepository.findById(1)).thenReturn(Optional.ofNullable(oneTestUser));
+        mvc.perform(delete("/api/users/1")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk());
     }
 
     @Test
