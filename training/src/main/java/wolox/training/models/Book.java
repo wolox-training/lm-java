@@ -77,11 +77,10 @@ public class Book {
         this.isbn = bookInfo.getIsbn();
         this.author = bookInfo.getAuthors()[0].getName();
         this.publisher = bookInfo.getPublishers()[0].getName();
-        this.genre = "Default";
+        this.genre = "default_genre";
         this.pages = bookInfo.getPages();
         this.image = "default_image";
     }
-
 
     public long getId() {
         return id;

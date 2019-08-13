@@ -65,7 +65,6 @@ public class BookController {
         return bookRepository.findFirstByIsbn(isbn).orElse(bookRepository.save(new Book(openLibraryService.bookInfo(isbn))));
     }
 
-
     @GetMapping("/{id}")
     public Book findOne(@PathVariable Long id) {
         return bookRepository.findById(id)
