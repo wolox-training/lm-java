@@ -14,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import org.thymeleaf.util.StringUtils;
 import wolox.training.exceptions.BookNotOwnedByUserException;
+import wolox.training.models.DTOs.BookInfoDTO;
 import wolox.training.utils.MessageConstants;
 
 @Entity
@@ -66,6 +67,19 @@ public class Book {
 
     public Book() {
         this.users = new HashSet<>();
+    }
+
+    public Book(BookInfoDTO bookInfo) {
+        this.users = new HashSet<>();
+        this.title = bookInfo.getTitle();
+        this.subtitle = bookInfo.getSubtitle();
+        this.year = bookInfo.getPublishDate();
+        this.isbn = bookInfo.getIsbn();
+        this.author = bookInfo.getAuthors()[0].getName();
+        this.publisher = bookInfo.getPublishers()[0].getName();
+        this.genre = "Default";
+        this.pages = bookInfo.getPages();
+        this.image = "default_image";
     }
 
 
