@@ -28,7 +28,7 @@ public class OpenLibraryService {
         } catch (IOException e) {
             throw new BookNotFoundException();
         }
-        BookInfoDTO bookInfoDTO = mapper.convertValue(root.path("ISBN:" +isbn), BookInfoDTO.class);
+        BookInfoDTO bookInfoDTO = mapper.convertValue(root.path("ISBN:" + isbn), BookInfoDTO.class);
         bookInfoDTO.setIsbn(isbn);
         bookInfoDTO.setSubtitle(DEFAULT_SUBTITLE);
         return bookInfoDTO;

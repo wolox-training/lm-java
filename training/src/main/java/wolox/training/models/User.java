@@ -4,6 +4,7 @@ package wolox.training.models;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Preconditions;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +34,9 @@ public class User {
     private String username;
 
     @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private String name;
 
     @Column(nullable = false)
@@ -46,8 +50,19 @@ public class User {
     @JsonIgnoreProperties("users")
     private Set<Book> books;
 
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
+    @JoinTable(
+        name = "users_roles",
+        joinColumns = @JoinColumn(
+            name = "user_id", referencedColumnName = "id"),
+        inverseJoinColumns = @JoinColumn(
+            name = "role_id", referencedColumnName = "id"))
+    @JsonIgnoreProperties("users")
+    private Set<Role> roles;
+
     public User() {
         this.books = new HashSet<>();
+        this.roles = new HashSet<>();
     }
 
     public int getId() {
@@ -90,6 +105,24 @@ public class User {
     public void setBooks(Set<Book> books) {
         Preconditions.checkNotNull(books, MessageConstants.NULL_PARAMETER);
         this.books = books;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        Preconditions.checkNotNull(password, MessageConstants.NULL_PARAMETER);
+        this.password = password;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        Preconditions.checkNotNull(roles, MessageConstants.NULL_PARAMETER);
+        this.roles = roles;
     }
 
     public void addBook(Book book) throws BookAlreadyOwnedException {

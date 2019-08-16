@@ -6,4 +6,6 @@ import wolox.training.models.User;
 
 public interface UserRepository extends CrudRepository<User, Integer> {
     Optional<User> findFirstByUsername(String username);
+
+    Optional<User> findFirstByEmail(String email);
 }
