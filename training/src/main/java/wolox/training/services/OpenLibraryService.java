@@ -13,8 +13,7 @@ import wolox.training.models.DTOs.BookInfoDTO;
 @Service
 public class OpenLibraryService {
     private final static String URL = "https://openlibrary.org/api/books?format=json&jscmd=data&bibkeys=ISBN:";
-    private final static String DEFAULT_SUBTITLE = "default_subtitle";
-
+    private final static String DEFAULT_SUBTITLE = "DEFAULT_SUBTITLE";
 
     public BookInfoDTO bookInfo(String isbn) {
         RestTemplate restTemplate = new RestTemplate();
@@ -29,8 +28,10 @@ public class OpenLibraryService {
             throw new BookNotFoundException();
         }
         BookInfoDTO bookInfoDTO = mapper.convertValue(root.path("ISBN:" +isbn), BookInfoDTO.class);
+        bookInfoDTO.setImage(mapper.convertValue(root.get("ISBN:" +isbn).get("cover").get("medium"), String.class));
         bookInfoDTO.setIsbn(isbn);
-        bookInfoDTO.setSubtitle(DEFAULT_SUBTITLE);
+        if (bookInfoDTO.getSubtitle() == null)
+            bookInfoDTO.setSubtitle(DEFAULT_SUBTITLE);
         return bookInfoDTO;
     }
 }

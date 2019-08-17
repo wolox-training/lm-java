@@ -79,7 +79,7 @@ public class Book {
         this.publisher = bookInfo.getPublishers()[0].getName();
         this.genre = "default_genre";
         this.pages = bookInfo.getPages();
-        this.image = "default_image";
+        this.image = bookInfo.getImage();
     }
 
     public long getId() {

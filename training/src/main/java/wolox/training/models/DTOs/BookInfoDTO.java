@@ -18,6 +18,7 @@ public class BookInfoDTO implements Serializable {
     private String publishDate;
     @JsonProperty("number_of_pages")
     private int pages;
+    private String image;
     @JsonProperty
     private AuthorDTO[] authors;
 
@@ -48,6 +49,9 @@ public class BookInfoDTO implements Serializable {
     public void setAuthors(AuthorDTO[] authors) {
         this.authors = authors;
     }
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public String getIsbn() {
         return isbn;
@@ -76,4 +80,8 @@ public class BookInfoDTO implements Serializable {
     public AuthorDTO[] getAuthors() {
         return authors;
     }
+    public String getImage() {
+        return image;
+    }
+
 }
