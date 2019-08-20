@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,10 +17,13 @@ import wolox.training.exceptions.BookNotFoundException;
 import wolox.training.exceptions.BookNotOwnedByUserException;
 import wolox.training.exceptions.UserIdMismatchException;
 import wolox.training.exceptions.UserNotFoundException;
+import wolox.training.exceptions.UsernameExistsException;
 import wolox.training.models.Book;
+import wolox.training.models.DTOs.UserDTO;
 import wolox.training.models.User;
 import wolox.training.repositories.BookRepository;
 import wolox.training.repositories.UserRepository;
+import wolox.training.services.SecurityService;
 
 @RestController
 @RequestMapping("/api/users")
@@ -33,20 +35,32 @@ public class UserController {
     @Autowired
     private BookRepository bookRepository;
 
+    @Autowired
+    private SecurityService securityService;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody User user) {
+    public User create(@RequestBody User user) throws UsernameExistsException {
+        if (userRepository.findFirstByUsername(user.getUsername()).isPresent())
+            throw new UsernameExistsException(user.getUsername() + "already exists");
         return userRepository.save(user);
     }
 
     @PutMapping("/{id}")
-    public User updateUser(@RequestBody User user, @PathVariable int id) {
-        if (user.getId() != id) {
+    public User updateUser(@RequestBody UserDTO userDTO, @PathVariable int id) {
+        if (userDTO.getId() != id) {
             throw new UserIdMismatchException();
         }
-        userRepository.findById(id)
+        User prevUser = userRepository.findById(id)
             .orElseThrow(UserNotFoundException::new);
+        User user = new User(userDTO);
+        user.setPassword(prevUser.getPassword());
         return userRepository.save(user);
+    }
+
+    @PutMapping("/{id}/updatePassword")
+    public void updatePassword(@RequestBody String password, @PathVariable int id) {
+        securityService.updatePassword(password, id);
     }
 
     @GetMapping
