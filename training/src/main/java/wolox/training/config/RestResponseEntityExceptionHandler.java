@@ -17,6 +17,6 @@ class RestResponseEntityExceptionHandler
     public ResponseEntity<Object> handleAccessDeniedException(
         Exception ex, WebRequest request) {
         return new ResponseEntity<Object>(
-            "Access denied message here", new HttpHeaders(), HttpStatus.FORBIDDEN);
+            "Denied action, please check if signed in correctly.", new HttpHeaders(), HttpStatus.FORBIDDEN);
     }
 }
