@@ -151,4 +151,12 @@ public class User {
         Preconditions.checkNotNull(roles);
         this.roles = roles;
     }
+
+    public void setFromDTO(UserDTO userDTO) {
+        this.setRoles(userDTO.getRoles());
+        this.setBooks(userDTO.getBooks());
+        this.username = userDTO.getUsername();
+        this.name = userDTO.getName();
+        this.birthdate = userDTO.getBirthdate();
+    }
 }

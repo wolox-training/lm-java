@@ -51,10 +51,9 @@ public class UserController {
         if (userDTO.getId() != id) {
             throw new UserIdMismatchException();
         }
-        User prevUser = userRepository.findById(id)
+        User user = userRepository.findById(id)
             .orElseThrow(UserNotFoundException::new);
-        User user = new User(userDTO);
-        user.setPassword(prevUser.getPassword());
+        user.setFromDTO(userDTO);
         return userRepository.save(user);
     }
 
