@@ -1,79 +1,34 @@
-package wolox.training.models;
+package wolox.training.models.DTOs;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.google.common.base.Preconditions;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
 import org.thymeleaf.util.StringUtils;
 import wolox.training.exceptions.BookAlreadyOwnedException;
 import wolox.training.exceptions.BookNotOwnedByUserException;
-import wolox.training.models.DTOs.UserDTO;
+import wolox.training.models.Book;
+import wolox.training.models.Role;
 import wolox.training.utils.MessageConstants;
 
-@Entity
-@Table(name = "users")
-public class User {
+public class UserDTO {
 
-    @Id
-    @GeneratedValue
     private int id;
 
-    @Column(nullable = false)
     private String username;
 
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private LocalDate birthdate;
 
-    private boolean enabled;
-
-    private boolean tokenExpired;
-
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinTable(
-        name = "book_users",
-        joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    @JsonIgnoreProperties("users")
     private Set<Book> books;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinTable(
-        name = "users_roles",
-        joinColumns = @JoinColumn(
-            name = "user_id", referencedColumnName = "id"),
-        inverseJoinColumns = @JoinColumn(
-            name = "role_id", referencedColumnName = "id"))
     private Set<Role> roles;
 
-    public User() {
+    public UserDTO() {
         this.books = new HashSet<>();
         this.roles = new HashSet<>();
-    }
-
-    public User(UserDTO userDTO) {
-        this.setRoles(userDTO.getRoles());
-        this.setBooks(userDTO.getBooks());
-        this.username = userDTO.getUsername();
-        this.name = userDTO.getName();
-        this.birthdate = userDTO.getBirthdate();
     }
 
     public int getId() {
@@ -118,16 +73,6 @@ public class User {
         this.books = books;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        Preconditions.checkNotNull(password);
-        Preconditions.checkArgument(!StringUtils.isEmpty(password), MessageConstants.EMPTY_STRING);
-        this.password = password;
-    }
-
     public void addBook(Book book) throws BookAlreadyOwnedException {
         Preconditions.checkNotNull(book, MessageConstants.NULL_PARAMETER);
         if (books.contains(book)) {
@@ -150,13 +95,5 @@ public class User {
     public void setRoles(Set<Role> roles) {
         Preconditions.checkNotNull(roles);
         this.roles = roles;
-    }
-
-    public void setFromDTO(UserDTO userDTO) {
-        this.setRoles(userDTO.getRoles());
-        this.setBooks(userDTO.getBooks());
-        this.username = userDTO.getUsername();
-        this.name = userDTO.getName();
-        this.birthdate = userDTO.getBirthdate();
     }
 }
