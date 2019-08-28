@@ -46,13 +46,20 @@ public class BookController {
 
     @ApiOperation(value = "View list of all books", response = Iterable.class)
     @GetMapping
-    public Iterable<Book> findAll() {
-        return bookRepository.findAll();
+    public Iterable<Book> findAll(@RequestParam(name = "author", required = false) String author,
+                                @RequestParam(name = "title", required = false) String title,
+                                @RequestParam(name = "subtitle", required = false) String subtitle,
+                                @RequestParam(name = "publisher", required = false) String publisher,
+                                @RequestParam(name = "genre", required = false) String genre,
+                                @RequestParam(name = "year", required = false) String year,
+                                @RequestParam(name = "pages", required = false) Integer pages,
+                                @RequestParam(name = "isbn", required = false) String isbn) {
+        return bookRepository.findAll(author, publisher, genre, year, title, subtitle, pages, isbn);
     }
 
     @GetMapping("/publisherAndGenreAndYear")
     public Iterable<Book> findByPublisherAndGenreAndYear(@RequestParam(name= "publisher", required = false) String publisher,
-                                                        @RequestParam(name="genre", required=false) String genre,
+                                                        @RequestParam(name="genre", required = false) String genre,
                                                         @RequestParam(name="year", required = false) String year) {
         return bookRepository.findByPublisherAndGenreAndYear(publisher, genre, year);
     }

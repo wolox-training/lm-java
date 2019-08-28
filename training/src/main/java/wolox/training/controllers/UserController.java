@@ -70,8 +70,9 @@ public class UserController {
     }
 
     @GetMapping
-    public Iterable<User> findAll() {
-        return userRepository.findAll();
+    public Iterable<User> findAll(@RequestParam(name = "start", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start, @RequestParam(name = "end", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+        @RequestParam(name = "name", required = false, defaultValue = "") String name, @RequestParam(name = "name", required = false, defaultValue = "") String username) {
+        return userRepository.findAll(start, end, name, username);
     }
 
     @GetMapping("/birthdateAndName")
