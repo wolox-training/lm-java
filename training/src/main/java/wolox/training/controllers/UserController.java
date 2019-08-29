@@ -70,15 +70,15 @@ public class UserController {
     }
 
     @GetMapping
-    public Iterable<User> findAll(@RequestParam(name = "start", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start, @RequestParam(name = "end", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
-        @RequestParam(name = "name", required = false, defaultValue = "") String name, @RequestParam(name = "name", required = false, defaultValue = "") String username) {
+    public Iterable<User> findAll(@RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start, @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+        @RequestParam(required = false, defaultValue = "") String name, @RequestParam(required = false, defaultValue = "") String username) {
         return userRepository.findAll(start, end, name, username);
     }
 
     @GetMapping("/birthdateAndName")
-    public Iterable<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@RequestParam(name = "start", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start,
-                                                                            @RequestParam(name = "end", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
-                                                                            @RequestParam(name = "name", required = false) String name) {
+    public Iterable<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start,
+                                                                            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+                                                                            @RequestParam(required = false) String name) {
         if (name != null) {
             name = name.toLowerCase();
         }
