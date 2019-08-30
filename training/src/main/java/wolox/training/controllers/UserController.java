@@ -1,7 +1,10 @@
 package wolox.training.controllers;
 
 import java.security.Principal;
+import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -68,6 +72,13 @@ public class UserController {
     @GetMapping
     public Iterable<User> findAll() {
         return userRepository.findAll();
+    }
+
+    @GetMapping("/birthdateAndName")
+    public Iterable<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@RequestParam(name = "start") @DateTimeFormat(iso = ISO.DATE) LocalDate start,
+                                                                            @RequestParam(name = "end") @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+                                                                            @RequestParam(name = "name") String name) {
+        return userRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(start, end, name);
     }
 
     @GetMapping("/{id}")
