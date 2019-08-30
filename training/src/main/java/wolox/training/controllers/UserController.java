@@ -75,9 +75,12 @@ public class UserController {
     }
 
     @GetMapping("/birthdateAndName")
-    public Iterable<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@RequestParam(name = "start") @DateTimeFormat(iso = ISO.DATE) LocalDate start,
-                                                                            @RequestParam(name = "end") @DateTimeFormat(iso = ISO.DATE) LocalDate end,
-                                                                            @RequestParam(name = "name") String name) {
+    public Iterable<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@RequestParam(name = "start", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start,
+                                                                            @RequestParam(name = "end", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+                                                                            @RequestParam(name = "name", required = false) String name) {
+        if (name != null) {
+            name = name.toLowerCase();
+        }
         return userRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(start, end, name);
     }
 
