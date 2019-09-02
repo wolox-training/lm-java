@@ -3,6 +3,9 @@ package wolox.training.controllers;
 import java.security.Principal;
 import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 import org.springframework.http.HttpStatus;
@@ -70,18 +73,20 @@ public class UserController {
     }
 
     @GetMapping
-    public Iterable<User> findAll() {
-        return userRepository.findAll();
+    public Page<User> findAll(@RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start, @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+        @RequestParam(required = false, defaultValue = "") String name, @RequestParam(required = false, defaultValue = "") String username, @PageableDefault(sort = { "username", "name" }, value = 20) Pageable pageable) {
+        return userRepository.findAll(start, end, name, username, pageable);
     }
 
     @GetMapping("/birthdateAndName")
-    public Iterable<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@RequestParam(name = "start", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start,
-                                                                            @RequestParam(name = "end", required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
-                                                                            @RequestParam(name = "name", required = false) String name) {
+    public Page<User> findByBirthdateBetweenAndNameContainingIgnoreCase(@RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate start,
+                                                                            @RequestParam(required = false) @DateTimeFormat(iso = ISO.DATE) LocalDate end,
+                                                                            @RequestParam(required = false) String name,
+                                                                            @PageableDefault(sort = { "username" , "name" }, value = 20) Pageable pageable) {
         if (name != null) {
             name = name.toLowerCase();
         }
-        return userRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(start, end, name);
+        return userRepository.findByBirthdateBetweenAndNameContainingIgnoreCase(start, end, name, pageable);
     }
 
     @GetMapping("/{id}")
